@@ -2,5 +2,5 @@ pub mod client;
 pub mod error;
 pub mod material;
 pub mod project;
-pub mod projectMaterial;
-pub mod materialType;
+pub mod project_material;
+pub mod material_type;

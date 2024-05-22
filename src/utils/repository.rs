@@ -13,8 +13,8 @@ use crate::models::client::Client;
 use crate::models::error::Error;
 use crate::models::material::Material;
 use crate::models::project::Project;
-use crate::models::materialType::MaterialType;
-use crate::models::projectMaterial::ProjectMaterial;
+use crate::models::material_type::MaterialType;
+use crate::models::project_material::ProjectMaterial;
 
 const DB_URL: &str = "mysql://localdev:Jokerlll3@localhost:3306/workshopmanagement";
 
@@ -70,7 +70,7 @@ impl Repository {
         self.keycloak.get_groups(token.to_string()).await?;
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
-        let query = "SELECT * FROM project WHERE id = ?";
+        let query = format!("SELECT * FROM project WHERE id = {}", id);
         let result = conn.query_map(query, |(id, name, client_id, description, startpoint, endpoint, estimated_costs, estimated_hours, costs)| {
             Project {
                 id,
@@ -164,7 +164,7 @@ impl Repository {
         self.keycloak.get_groups(token.to_string()).await?;
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
-        let query = "SELECT * FROM client WHERE id = ?";
+        let query = format!("SELECT * FROM client WHERE id = {}", id);
         let result = conn.query_map(query, |(id, firstname, lastname, phone)| {
             Client {
                 id,
@@ -256,7 +256,7 @@ impl Repository {
         self.keycloak.get_groups(token.to_string()).await?;
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
-        let query = "SELECT * FROM material WHERE id = ?";
+        let query = format!("SELECT * FROM material WHERE id = {}", id);
         let result = conn.query_map(query, |(id, name, description, type_id, amount, costs, threshold_value)| {
             Material {
                 id,
@@ -347,7 +347,7 @@ impl Repository {
         self.keycloak.get_groups(token.to_string()).await?;
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
-        let query = "SELECT * FROM material_type WHERE id = ?";
+        let query = format!("SELECT * FROM material_type WHERE id = {}", id);
         let result = conn.query_map(query, |(id, name, description)| {
             MaterialType {
                 id,
@@ -435,7 +435,7 @@ impl Repository {
         self.keycloak.get_groups(token.to_string()).await?;
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
-        let query = "SELECT * FROM project_material WHERE id = ?";
+        let query = format!("SELECT * FROM project_material WHERE id = {}", id);
         let result = conn.query_map(query, |(id, project_id, material_id, amount)| {
             ProjectMaterial {
                 id,

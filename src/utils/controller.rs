@@ -14,8 +14,8 @@ use crate::utils::repository::Repository;
 use crate::models::client::Client;
 use crate::models::material::Material;
 use crate::models::project::Project;
-use crate::models::materialType::MaterialType;
-use crate::models::projectMaterial::ProjectMaterial;
+use crate::models::material_type::MaterialType;
+use crate::models::project_material::ProjectMaterial;
 
 static REPO: Mutex<Repository> = Mutex::new(Repository::new());
 

@@ -58,7 +58,7 @@ pub async fn create_project(auth: BearerAuth, project: Json<Project>) -> HttpRes
 }
 
 #[put("/Projects/{id}")]
-pub async fn update_project(auth: BearerAuth, id: Path<i32>, project: Json<Project>) -> HttpResponse {
+pub async fn update_project(auth: BearerAuth, project: Json<Project>) -> HttpResponse {
     let result = REPO.lock().unwrap().update_project(project.into_inner(), &auth.token().to_string()).await;
     match result {
         Ok(_) => HttpResponse::Ok().finish(),
@@ -120,7 +120,7 @@ pub async fn create_material_type(auth: BearerAuth, material_type: Json<Material
 }
 
 #[put("/MaterialTypes/{id}")]
-pub async fn update_material_type(auth: BearerAuth, id: Path<i32>, material_type: Json<MaterialType>) -> HttpResponse {
+pub async fn update_material_type(auth: BearerAuth, material_type: Json<MaterialType>) -> HttpResponse {
     let result = REPO.lock().unwrap().update_material_type(material_type.into_inner(), &auth.token().to_string()).await;
     match result {
         Ok(_) => HttpResponse::Ok().finish(),
@@ -182,7 +182,7 @@ pub async fn create_material(auth: BearerAuth, material: Json<Material>) -> Http
 }
 
 #[put("/Materials/{id}")]
-pub async fn update_material(auth: BearerAuth, id: Path<i32>, material: Json<Material>) -> HttpResponse {
+pub async fn update_material(auth: BearerAuth, material: Json<Material>) -> HttpResponse {
     let result = REPO.lock().unwrap().update_material(material.into_inner(), &auth.token().to_string()).await;
     match result {
         Ok(_) => HttpResponse::Ok().finish(),
@@ -244,7 +244,7 @@ pub async fn create_project_material(auth: BearerAuth, project_material: Json<Pr
 }
 
 #[put("/ProjectMaterials/{id}")]
-pub async fn update_project_material(auth: BearerAuth, id: Path<i32>, project_material: Json<ProjectMaterial>) -> HttpResponse {
+pub async fn update_project_material(auth: BearerAuth, project_material: Json<ProjectMaterial>) -> HttpResponse {
     let result = REPO.lock().unwrap().update_project_material(project_material.into_inner(), &auth.token().to_string()).await;
     match result {
         Ok(_) => HttpResponse::Ok().finish(),
@@ -306,7 +306,7 @@ pub async fn create_client(auth: BearerAuth, client: Json<Client>) -> HttpRespon
 }
 
 #[put("/Clients/{id}")]
-pub async fn update_client(auth: BearerAuth, id: Path<i32>, client: Json<Client>) -> HttpResponse {
+pub async fn update_client(auth: BearerAuth, client: Json<Client>) -> HttpResponse {
     let result = REPO.lock().unwrap().update_client(client.into_inner(), &auth.token().to_string()).await;
     match result {
         Ok(_) => HttpResponse::Ok().finish(),

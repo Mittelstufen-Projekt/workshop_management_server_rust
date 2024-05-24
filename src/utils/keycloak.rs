@@ -16,13 +16,15 @@ const CLIENT_SECRET: &str = "Ip7GUqM8mRuIHMcq3tOuuHCaejSwSk3S";
 
 #[derive(Clone)]
 pub struct Keycloak {
-
+    last_request: u64,
+    number_of_frequent_requests: u64,
 }
 
 impl Keycloak {
     pub const fn new() -> Keycloak {
         Keycloak {
-
+            last_request: 0,
+            number_of_frequent_requests: 0,
         }
     }
 
@@ -50,6 +52,19 @@ impl Keycloak {
     }
 
     pub async fn get_groups(&mut self, token: String) -> Result<Vec<String>, Error> {
+        let current_time = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_secs();
+        if current_time - self.last_request < 3 {
+            self.number_of_frequent_requests += 1;
+            if self.number_of_frequent_requests > 10 {
+                return Err(Error::new("Too many requests".to_string(), 429));
+            }
+        } else {
+            self.last_request = current_time;
+            self.number_of_frequent_requests = 0;
+        }
         let response = reqwest::Client::new()
             .post(&format!(
                 "{}/realms/{}/protocol/openid-connect/token/introspect",

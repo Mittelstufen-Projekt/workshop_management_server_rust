@@ -7,7 +7,7 @@
 
 use std::sync::Mutex;
 
-use actix_web::{delete, get, post, put, HttpResponse, web::{Json, Path}};
+use actix_web::{delete, get, post, put, web::{Json, Path}, HttpResponse};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use crate::utils::repository::Repository;
 

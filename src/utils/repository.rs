@@ -496,57 +496,31 @@ impl Repository {
 
 #[cfg(test)]
 mod tests {
+    use std::result;
+
     use crate::utils::keycloak;
 
     use super::*;
 
-    // Testing add Methods
+    // Testing add methods (Need to do it in one function because of the specific order and async would randomize it)
     #[actix_rt::test]
-    async fn test_add_client() {
+    async fn test_add_values() {
         let mut repository = Repository::new();
         let mut keycloak = keycloak::Keycloak::new();
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
         let client = Client::test_data();
+        let material_type = MaterialType::test_data();
+        let material = Material::test_data();
+        let project = Project::test_data();
+        let project_material = ProjectMaterial::test_data();
         let result = repository.add_client(client, &token).await;
         assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_add_material_type() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let material_type = MaterialType::test_data();
         let result = repository.add_material_type(material_type, &token).await;
         assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_add_material() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let material = Material::test_data();
         let result = repository.add_material(material, &token).await;
         assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_add_project() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let project = Project::test_data();
         let result = repository.add_project(project, &token).await;
         assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_add_project_material() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let project_material = ProjectMaterial::test_data();
         let result = repository.add_project_material(project_material, &token).await;
         assert!(result.is_ok());
     }

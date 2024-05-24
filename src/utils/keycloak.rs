@@ -63,12 +63,12 @@ impl<'a> Keycloak<'a> {
         let response = reqwest::Client::new()
             .post(&format!(
                 "{}/realms/{}/protocol/openid-connect/token/introspect",
-                API_URL, REALM
+                &self.api_url, &self.realm
             ))
             .form(&[
-                ("client_id", CLIENT_ID),
-                ("client_secret", CLIENT_SECRET),
-                ("token", &token),
+                ("client_id", &self.client_id),
+                ("client_secret", &self.client_secret),
+                ("token", &token.as_ref()),
             ])
             .timeout(std::time::Duration::from_secs(5))
             .send()
@@ -82,11 +82,14 @@ impl<'a> Keycloak<'a> {
         match response.error_for_status_ref().err() {
             Some(err) => Err(Error::new(err.to_string(), 500)),
             None => {
+                // Parse the response
                 let json: serde_json::Value = response.json().await.unwrap();
+                // Check if the token is valid (Contains groups?)
                 let groups = match json["realm_access"]["roles"].as_array() {
                     None => return Err(Error::new("Invalid token".to_string(), 401)),
                     Some(groups) => groups,
                 };
+                // Return the groups
                 let mut result = Vec::new();
                 for group in groups {
                     result.push(group.as_str().unwrap().to_string());

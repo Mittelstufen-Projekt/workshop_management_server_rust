@@ -7,22 +7,6 @@
 
 use serde::{Deserialize, Serialize};
 
-/*
-
-CREATE TABLE `project` (
-  `id` int NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `client_id` int NOT NULL,
-  `description` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `startpoint` float NOT NULL,
-  `endpoint` float NOT NULL,
-  `estimated_costs` float NOT NULL,
-  `estimatedHours` float NOT NULL,
-  `costs` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-*/
-
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Project {
     pub id: i32,

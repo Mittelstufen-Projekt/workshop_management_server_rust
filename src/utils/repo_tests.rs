@@ -9,25 +9,31 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::keycloak::Keycloak;
-    use crate::utils::repository::Repository;
     use crate::models::client::Client;
     use crate::models::material::Material;
-    use crate::models::project::Project;
     use crate::models::material_type::MaterialType;
+    use crate::models::project::Project;
     use crate::models::project_material::ProjectMaterial;
-    
+    use crate::utils::keycloak::Keycloak;
+    use crate::utils::repository::Repository;
 
     /*
-    
-        Add a function to keycloak to get a token (Usually only needed in frontend)            
+
+        Add a function to keycloak to get a token (Usually only needed in frontend)
 
     */
     impl<'a> Keycloak<'a> {
-        pub async fn login_user(&mut self, username: &str, password: &str) -> Result<String, reqwest::Error> {
+        pub async fn login_user(
+            &mut self,
+            username: &str,
+            password: &str,
+        ) -> Result<String, reqwest::Error> {
             // Send a request to keycloak to get a token
             let response = reqwest::Client::new()
-                .post(&format!("{}/realms/{}/protocol/openid-connect/token", &self.api_url, &self.realm))
+                .post(&format!(
+                    "{}/realms/{}/protocol/openid-connect/token",
+                    &self.api_url, &self.realm
+                ))
                 .form(&[
                     ("client_id", &self.client_id),
                     ("client_secret", &self.client_secret),
@@ -50,11 +56,11 @@ mod tests {
     }
 
     /*
-    
-        Test Values for all data types
-    
-     */
-    
+
+       Test Values for all data types
+
+    */
+
     impl Client {
         pub fn test_data() -> Client {
             Client {
@@ -83,7 +89,7 @@ mod tests {
                 description: "A material that comes from trees.".to_string(),
             }
         }
-    
+
         pub fn test_update_data() -> MaterialType {
             MaterialType {
                 id: 1,
@@ -105,7 +111,7 @@ mod tests {
                 threshold_value: 50,
             }
         }
-    
+
         pub fn test_update_data() -> Material {
             Material {
                 id: 1,
@@ -128,7 +134,7 @@ mod tests {
                 amount: 10,
             }
         }
-    
+
         pub fn test_update_data() -> ProjectMaterial {
             ProjectMaterial {
                 id: 1,
@@ -153,7 +159,7 @@ mod tests {
                 costs: 100.0,
             }
         }
-    
+
         pub fn test_update_data() -> Project {
             Project {
                 id: 1,
@@ -169,25 +175,30 @@ mod tests {
         }
     }
 
-
     /*
-    
-        Test Functions
 
-     */
+       Test Functions
+
+    */
 
     // Testing add methods (Need to do it in one function because of the specific order and async would randomize it)
+    // Only commented the first one because the other test are mostly the same but with different function calls
     #[actix_rt::test]
     async fn test_add_values() {
+        // Create a new repository and keycloak instance
         let mut repository = Repository::new();
         let mut keycloak = Keycloak::new();
+        // Get a token from keycloak
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        // Create test data
         let client = Client::test_data();
         let material_type = MaterialType::test_data();
         let material = Material::test_data();
         let project = Project::test_data();
         let project_material = ProjectMaterial::test_data();
+        // Add the test data to the repository
         let result = repository.add_client(client, &token).await;
+        // Check if the result is ok
         assert!(result.is_ok());
         let result = repository.add_material_type(material_type, &token).await;
         assert!(result.is_ok());
@@ -195,7 +206,9 @@ mod tests {
         assert!(result.is_ok());
         let result = repository.add_project(project, &token).await;
         assert!(result.is_ok());
-        let result = repository.add_project_material(project_material, &token).await;
+        let result = repository
+            .add_project_material(project_material, &token)
+            .await;
         assert!(result.is_ok());
     }
 
@@ -338,7 +351,9 @@ mod tests {
         let mut keycloak = Keycloak::new();
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
         let project_material = ProjectMaterial::test_update_data();
-        let result = repository.update_project_material(project_material, &token).await;
+        let result = repository
+            .update_project_material(project_material, &token)
+            .await;
         assert!(result.is_ok());
     }
 
@@ -386,5 +401,5 @@ mod tests {
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
         let result = repository.remove_project_material(1, &token).await;
         assert!(result.is_ok());
-    }    
+    }
 }

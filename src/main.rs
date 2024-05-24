@@ -5,15 +5,18 @@
 
 */
 
+// Declare the necessary modules
 mod models;
 mod utils;
 
+// Import the necessary modules
 use actix_cors::Cors;
 use actix_web::{middleware, App, HttpServer};
 
+// Import the controller module
 use utils::controller;
 
-#[actix_rt::main]
+#[actix_rt::main] // Macro to start the actix runtime
 async fn main() -> std::io::Result<()> {
     let port = "8580".to_string();
 

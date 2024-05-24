@@ -14,3 +14,23 @@ pub struct Client {
     pub lastname: String,
     pub phone: String,
 }
+
+impl Client {
+    pub fn test_data() -> Client {
+        Client {
+            id: 1,
+            firstname: "John".to_string(),
+            lastname: "Doe".to_string(),
+            phone: "123-456-7890".to_string(),
+        }
+    }
+
+    pub fn test_update_data() -> Client {
+        Client {
+            id: 1,
+            firstname: "Jane".to_string(),
+            lastname: "Doe".to_string(),
+            phone: "123-456-7890".to_string(),
+        }
+    }
+}

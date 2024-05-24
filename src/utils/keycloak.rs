@@ -28,6 +28,29 @@ impl Keycloak {
         }
     }
 
+    // Only needed for tests to be able to verify the token
+    pub async fn login_user(&mut self, username: &str, password: &str) -> Result<String, reqwest::Error> {
+        let response = reqwest::Client::new()
+            .post(&format!("{}/realms/{}/protocol/openid-connect/token", API_URL, REALM))
+            .form(&[
+                ("client_id", CLIENT_ID),
+                ("client_secret", CLIENT_SECRET),
+                ("username", username),
+                ("password", password),
+                ("grant_type", "password"),
+            ])
+            .timeout(std::time::Duration::from_secs(5))
+            .send()
+            .await?;
+        match response.error_for_status_ref().err() {
+            Some(err) => Err(err),
+            None => {
+                let token: serde_json::Value = response.json().await?;
+                Ok(token["access_token"].as_str().unwrap().to_string())
+            }
+        }
+    }
+
     pub async fn get_groups(&mut self, token: String) -> Result<Vec<String>, Error> {
         let current_time = SystemTime::now()
             .duration_since(UNIX_EPOCH)

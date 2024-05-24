@@ -23,3 +23,21 @@ pub struct MaterialType {
     pub name: String,
     pub description: String,
 }
+
+impl MaterialType {
+    pub fn test_data() -> MaterialType {
+        MaterialType {
+            id: 1,
+            name: "Wood".to_string(),
+            description: "A material that comes from trees.".to_string(),
+        }
+    }
+
+    pub fn test_update_data() -> MaterialType {
+        MaterialType {
+            id: 1,
+            name: "Metal".to_string(),
+            description: "A material that comes from the ground.".to_string(),
+        }
+    }
+}

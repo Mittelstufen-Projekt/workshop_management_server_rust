@@ -26,3 +26,23 @@ pub struct ProjectMaterial {
     pub material_id: i32,
     pub amount: i32,
 }
+
+impl ProjectMaterial {
+    pub fn test_data() -> ProjectMaterial {
+        ProjectMaterial {
+            id: 1,
+            project_id: 1,
+            material_id: 1,
+            amount: 10,
+        }
+    }
+
+    pub fn test_update_data() -> ProjectMaterial {
+        ProjectMaterial {
+            id: 1,
+            project_id: 1,
+            material_id: 1,
+            amount: 20,
+        }
+    }
+}

@@ -17,10 +17,14 @@ use utils::controller;
 async fn main() -> std::io::Result<()> {
     let port = "8580".to_string();
 
+    // Create a new HttpServer and bind it to the specified port
     HttpServer::new(|| {
         App::new()
+            // Enable logger
             .wrap(middleware::Logger::default())
+            // Enable CORS
             .wrap(Cors::permissive())
+            // Define the routes for the server
             .service(controller::get_project)
             .service(controller::get_project_by_id)
             .service(controller::create_project)
@@ -47,6 +51,7 @@ async fn main() -> std::io::Result<()> {
             .service(controller::update_client)
             .service(controller::delete_client)
     })
+    // Bind the server to the specified port
     .bind(format!("0.0.0.0:{port}", port = port))?
     .run()
     .await

@@ -30,6 +30,7 @@ impl<'a> Repository<'a> {
         }
     }
 
+    // Get a new connection to the database
     pub fn connect(&self) -> Pool {
         let opts = Opts::from_url(DB_URL).unwrap();
         Pool::new(opts).unwrap()

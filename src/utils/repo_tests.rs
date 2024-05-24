@@ -2,6 +2,8 @@
 
     Author: Justin
     Description: This file contains the tests for the repository functions.
+    How to run: cargo test
+    Important: Tests assume an empty database.
 
 */
 

@@ -35,33 +35,3 @@ pub struct Project {
     pub estimated_hours: f32,
     pub costs: f32,
 }
-
-impl Project {
-    pub fn test_data() -> Project {
-        Project {
-            id: 1,
-            name: "Table".to_string(),
-            client_id: 1,
-            description: "A table made out of wood.".to_string(),
-            startpoint: 1000000000.0,
-            endpoint: 1000000000.0,
-            estimated_costs: 100.0,
-            estimated_hours: 10.0,
-            costs: 100.0,
-        }
-    }
-
-    pub fn test_update_data() -> Project {
-        Project {
-            id: 1,
-            name: "Chair".to_string(),
-            client_id: 1,
-            description: "A chair made out of wood.".to_string(),
-            startpoint: 1000000000.0,
-            endpoint: 1000000000.0,
-            estimated_costs: 100.0,
-            estimated_hours: 10.0,
-            costs: 100.0,
-        }
-    }
-}

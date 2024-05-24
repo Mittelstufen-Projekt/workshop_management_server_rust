@@ -500,71 +500,7 @@ mod tests {
 
     use super::*;
 
-    #[actix_rt::test]
-    async fn test_get_all_projects() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_all_projects(&token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_project() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_project(1, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_add_project() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let project = Project::test_data();
-        let result = repository.add_project(project, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_update_project() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let project = Project::test_update_data();
-        let result = repository.update_project(project, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_remove_project() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.remove_project(1, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_all_clients() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_all_clients(&token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_client() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_client(1, &token).await;
-        assert!(result.is_ok());
-    }
-
+    // Testing add Methods
     #[actix_rt::test]
     async fn test_add_client() {
         let mut repository = Repository::new();
@@ -572,90 +508,6 @@ mod tests {
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
         let client = Client::test_data();
         let result = repository.add_client(client, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_update_client() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let client = Client::test_update_data();
-        let result = repository.update_client(client, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_remove_client() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.remove_client(1, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_all_materials() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_all_materials(&token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_material() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_material(1, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_add_material() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let material = Material::test_data();
-        let result = repository.add_material(material, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_update_material() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let material = Material::test_update_data();
-        let result = repository.update_material(material, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_remove_material() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.remove_material(1, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_all_material_types() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_all_material_types(&token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_material_type() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_material_type(1, &token).await;
         assert!(result.is_ok());
     }
 
@@ -670,39 +522,22 @@ mod tests {
     }
 
     #[actix_rt::test]
-    async fn test_update_material_type() {
+    async fn test_add_material() {
         let mut repository = Repository::new();
         let mut keycloak = keycloak::Keycloak::new();
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let material_type = MaterialType::test_update_data();
-        let result = repository.update_material_type(material_type, &token).await;
+        let material = Material::test_data();
+        let result = repository.add_material(material, &token).await;
         assert!(result.is_ok());
     }
 
     #[actix_rt::test]
-    async fn test_remove_material_type() {
+    async fn test_add_project() {
         let mut repository = Repository::new();
         let mut keycloak = keycloak::Keycloak::new();
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.remove_material_type(1, &token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_all_project_materials() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_all_project_materials(&token).await;
-        assert!(result.is_ok());
-    }
-
-    #[actix_rt::test]
-    async fn test_get_project_material() {
-        let mut repository = Repository::new();
-        let mut keycloak = keycloak::Keycloak::new();
-        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
-        let result = repository.get_project_material(1, &token).await;
+        let project = Project::test_data();
+        let result = repository.add_project(project, &token).await;
         assert!(result.is_ok());
     }
 
@@ -716,6 +551,139 @@ mod tests {
         assert!(result.is_ok());
     }
 
+    // Testing get all methods
+    #[actix_rt::test]
+    async fn test_get_all_projects() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_all_projects(&token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_all_clients() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_all_clients(&token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_all_materials() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_all_materials(&token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_all_material_types() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_all_material_types(&token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_all_project_materials() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_all_project_materials(&token).await;
+        assert!(result.is_ok());
+    }
+
+    // Testing single get methods
+    #[actix_rt::test]
+    async fn test_get_project() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_project(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_client() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_client(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_material() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_material(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_material_type() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_material_type(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_get_project_material() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.get_project_material(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    // Testing Update Methods
+    #[actix_rt::test]
+    async fn test_update_project() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let project = Project::test_update_data();
+        let result = repository.update_project(project, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_update_client() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let client = Client::test_update_data();
+        let result = repository.update_client(client, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_update_material() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let material = Material::test_update_data();
+        let result = repository.update_material(material, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_update_material_type() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let material_type = MaterialType::test_update_data();
+        let result = repository.update_material_type(material_type, &token).await;
+        assert!(result.is_ok());
+    }
+
     #[actix_rt::test]
     async fn test_update_project_material() {
         let mut repository = Repository::new();
@@ -723,6 +691,43 @@ mod tests {
         let token = keycloak.login_user("test_user", "test_user").await.unwrap();
         let project_material = ProjectMaterial::test_update_data();
         let result = repository.update_project_material(project_material, &token).await;
+        assert!(result.is_ok());
+    }
+
+    // Testing remove methods
+    #[actix_rt::test]
+    async fn test_remove_project() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.remove_project(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_remove_client() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.remove_client(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_remove_material() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.remove_material(1, &token).await;
+        assert!(result.is_ok());
+    }
+
+    #[actix_rt::test]
+    async fn test_remove_material_type() {
+        let mut repository = Repository::new();
+        let mut keycloak = keycloak::Keycloak::new();
+        let token = keycloak.login_user("test_user", "test_user").await.unwrap();
+        let result = repository.remove_material_type(1, &token).await;
         assert!(result.is_ok());
     }
 

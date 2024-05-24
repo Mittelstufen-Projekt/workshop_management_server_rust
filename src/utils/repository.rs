@@ -18,12 +18,13 @@ use crate::models::project_material::ProjectMaterial;
 
 const DB_URL: &str = "mysql://localdev:Jokerlll3@localhost:3306/workshopmanagement";
 
-pub struct Repository {
-    keycloak: Keycloak,
+// We need to specify the lifetime of the repo because keycloak needs a specific lifetime
+pub struct Repository<'a> {
+    keycloak: Keycloak<'a>
 }
 
-impl Repository {
-    pub const fn new() -> Repository {
+impl<'a> Repository<'a> {
+    pub const fn new() -> Repository<'a> {
         Repository {
             keycloak: Keycloak::new(),
         }

@@ -5,8 +5,8 @@
 
 */
 
-// Mutex is used to allow multiple threads to access the repository
-use std::sync::Mutex;
+// Mutex is used to allow multiple threads to access the repository (Need to use external crate because it needs to have thread safety)
+use async_mutex::Mutex;
 
 // Import the actix-web crate
 use actix_web::{
@@ -32,13 +32,19 @@ static REPO: Mutex<Repository> = Mutex::new(Repository::new());
 pub async fn get_project(auth: BearerAuth) -> HttpResponse {
     // Call the neccecary function from the repository
     let result = REPO
+        // Lock the repository to prevent multiple threads from accessing it at the same time
         .lock()
-        .unwrap()
+        // Await the return of the lock call
+        .await
+        // Call the get_all_projects function from the repository
         .get_all_projects(&auth.token().to_string())
+        // Await the return of the get_all_projects function
         .await;
     // Check if the result is an error
     let projects = match result {
+        // If the result is Ok, return the projects
         Ok(projects) => projects,
+        // If the result is an error, print the error and return an unauthorized response
         Err(e) => {
             // Print the error and return an unauthorized response (Cannot create a custom HTTP Response so far, so just send 401)
             println!("{}", e);
@@ -53,7 +59,7 @@ pub async fn get_project(auth: BearerAuth) -> HttpResponse {
 pub async fn get_project_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_project(id.into_inner(), &auth.token().to_string())
         .await;
     let project = match result {
@@ -70,7 +76,7 @@ pub async fn get_project_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse 
 pub async fn create_project(auth: BearerAuth, project: Json<Project>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .add_project(project.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -86,7 +92,7 @@ pub async fn create_project(auth: BearerAuth, project: Json<Project>) -> HttpRes
 pub async fn update_project(auth: BearerAuth, project: Json<Project>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .update_project(project.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -102,7 +108,7 @@ pub async fn update_project(auth: BearerAuth, project: Json<Project>) -> HttpRes
 pub async fn delete_project(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .remove_project(id.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -118,7 +124,7 @@ pub async fn delete_project(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
 pub async fn get_material_types(auth: BearerAuth) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_all_material_types(&auth.token().to_string())
         .await;
     let material_types = match result {
@@ -135,7 +141,7 @@ pub async fn get_material_types(auth: BearerAuth) -> HttpResponse {
 pub async fn get_material_type_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_material_type(id.into_inner(), &auth.token().to_string())
         .await;
     let material_type = match result {
@@ -155,7 +161,7 @@ pub async fn create_material_type(
 ) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .add_material_type(material_type.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -174,7 +180,7 @@ pub async fn update_material_type(
 ) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .update_material_type(material_type.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -190,7 +196,7 @@ pub async fn update_material_type(
 pub async fn delete_material_type(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .remove_material_type(id.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -206,7 +212,7 @@ pub async fn delete_material_type(auth: BearerAuth, id: Path<i32>) -> HttpRespon
 pub async fn get_materials(auth: BearerAuth) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_all_materials(&auth.token().to_string())
         .await;
     let materials = match result {
@@ -223,7 +229,7 @@ pub async fn get_materials(auth: BearerAuth) -> HttpResponse {
 pub async fn get_material_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_material(id.into_inner(), &auth.token().to_string())
         .await;
     let material = match result {
@@ -240,7 +246,7 @@ pub async fn get_material_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse
 pub async fn create_material(auth: BearerAuth, material: Json<Material>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .add_material(material.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -256,7 +262,7 @@ pub async fn create_material(auth: BearerAuth, material: Json<Material>) -> Http
 pub async fn update_material(auth: BearerAuth, material: Json<Material>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .update_material(material.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -272,7 +278,7 @@ pub async fn update_material(auth: BearerAuth, material: Json<Material>) -> Http
 pub async fn delete_material(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .remove_material(id.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -288,7 +294,7 @@ pub async fn delete_material(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
 pub async fn get_project_materials(auth: BearerAuth) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_all_project_materials(&auth.token().to_string())
         .await;
     let project_materials = match result {
@@ -305,7 +311,7 @@ pub async fn get_project_materials(auth: BearerAuth) -> HttpResponse {
 pub async fn get_project_material_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_project_material(id.into_inner(), &auth.token().to_string())
         .await;
     let project_material = match result {
@@ -325,7 +331,7 @@ pub async fn create_project_material(
 ) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .add_project_material(project_material.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -344,7 +350,7 @@ pub async fn update_project_material(
 ) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .update_project_material(project_material.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -360,7 +366,7 @@ pub async fn update_project_material(
 pub async fn delete_project_material(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .remove_project_material(id.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -376,7 +382,7 @@ pub async fn delete_project_material(auth: BearerAuth, id: Path<i32>) -> HttpRes
 pub async fn get_clients(auth: BearerAuth) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_all_clients(&auth.token().to_string())
         .await;
     let clients = match result {
@@ -393,7 +399,7 @@ pub async fn get_clients(auth: BearerAuth) -> HttpResponse {
 pub async fn get_client_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .get_client(id.into_inner(), &auth.token().to_string())
         .await;
     let client = match result {
@@ -410,7 +416,7 @@ pub async fn get_client_by_id(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
 pub async fn create_client(auth: BearerAuth, client: Json<Client>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .add_client(client.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -426,7 +432,7 @@ pub async fn create_client(auth: BearerAuth, client: Json<Client>) -> HttpRespon
 pub async fn update_client(auth: BearerAuth, client: Json<Client>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .update_client(client.into_inner(), &auth.token().to_string())
         .await;
     match result {
@@ -442,7 +448,7 @@ pub async fn update_client(auth: BearerAuth, client: Json<Client>) -> HttpRespon
 pub async fn delete_client(auth: BearerAuth, id: Path<i32>) -> HttpResponse {
     let result = REPO
         .lock()
-        .unwrap()
+        .await
         .remove_client(id.into_inner(), &auth.token().to_string())
         .await;
     match result {

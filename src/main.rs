@@ -8,6 +8,7 @@
 // Declare the necessary modules
 mod models;
 mod utils;
+mod tests;
 
 // Import the necessary modules
 use actix_cors::Cors;

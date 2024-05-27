@@ -36,16 +36,23 @@ impl<'a> Repository<'a> {
 
     // Get a new connection to the database
     pub fn connect(&self) -> Pool {
+        // Create a new connection pool
         let opts = Opts::from_url(DB_URL).unwrap();
         Pool::new(opts).unwrap()
     }
 
     pub async fn get_all_projects(&mut self, token: &String) -> Result<Vec<Project>, Error> {
+        // Check if the token is valid and if the user has the correct permissions
+        // (If not an error will be thrown and the function will return early because of the ? operator)
         self.keycloak.get_groups(token.to_string()).await?;
+        // Create a new vector to store the projects
         let mut projects = Vec::new();
+        // Get a connection pool
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
+        // Create a query to get all projects
         let query = "SELECT * FROM project";
+        // Execute the query and map the results to a Project struct
         let result = conn.query_map(
             query,
             |(
@@ -72,12 +79,15 @@ impl<'a> Repository<'a> {
                 }
             },
         );
+        // Check if the query was successful
         match result {
+            // If the query was successful, add the projects to the vector
             Ok(projects_res) => {
                 for project in projects_res {
                     projects.push(project);
                 }
             }
+            // If the query was not successful, return an error
             Err(err) => {
                 return Err(Error::new(err.to_string(), 500));
             }

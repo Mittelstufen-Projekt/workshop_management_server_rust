@@ -7,11 +7,21 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# MySQL database
 mysql = "*"
+# Actix web framework
 actix-web = "4.0.0-beta.10"
+# Logging
 actix-rt = "2.3.0"
+# CORS support
 actix-cors = "0.7.0"
+# HTTP authentication
 actix-web-httpauth = "0.8.1"
+# HTTP client
 reqwest = { version = "0.12.4", features = ["json"] }
+# JSON serialization
 serde = { version = "1.0", features = ["derive"] }
+# JSON serialization
 serde_json = "1.0"
+# Mutex that is aware of thread safety
+async-mutex = "1.4.0"

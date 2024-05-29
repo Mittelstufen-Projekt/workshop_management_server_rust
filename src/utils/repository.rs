@@ -140,7 +140,10 @@ impl<'a> Repository<'a> {
     }
 
     pub async fn add_project(&mut self, project: Project, token: &String) -> Result<(), Error> {
-        self.keycloak.get_groups(token.to_string()).await?;
+        // Check if the user has the correct permissions
+        if self.keycloak.get_groups(token.to_owned()).await?.contains(&"admin".to_string()) {
+            return Err(Error::new("You do not have the correct permissions".to_string(), 403));
+        }
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
         let query = "INSERT INTO project (id, name, client_id, description, startpoint, endpoint, estimated_costs, estimated_hours, costs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -165,7 +168,9 @@ impl<'a> Repository<'a> {
     }
 
     pub async fn update_project(&mut self, project: Project, token: &String) -> Result<(), Error> {
-        self.keycloak.get_groups(token.to_string()).await?;
+        if self.keycloak.get_groups(token.to_owned()).await?.contains(&"admin".to_string()) {
+            return Err(Error::new("You do not have the correct permissions".to_string(), 403));
+        }
         let pool: &Pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
         let query = "UPDATE project SET name = ?, client_id = ?, description = ?, startpoint = ?, endpoint = ?, estimated_costs = ?, estimated_hours = ?, costs = ? WHERE id = ?";
@@ -190,7 +195,9 @@ impl<'a> Repository<'a> {
     }
 
     pub async fn remove_project(&mut self, id: i32, token: &String) -> Result<(), Error> {
-        self.keycloak.get_groups(token.to_string()).await?;
+        if self.keycloak.get_groups(token.to_owned()).await?.contains(&"admin".to_string()) {
+            return Err(Error::new("You do not have the correct permissions".to_string(), 403));
+        }
         let pool = &self.connect();
         let mut conn = pool.get_conn().unwrap();
         let query = "DELETE FROM project WHERE id = ?";
